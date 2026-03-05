@@ -1,0 +1,21 @@
+id,amount,category,date,description
+1,450.00,Food & Dining,2024-01-05,Lunch at office canteen
+2,1200.00,Transportation,2024-01-08,Monthly metro pass
+3,3500.00,Shopping,2024-01-12,Winter jacket purchase
+4,850.00,Health & Medical,2024-01-15,Doctor consultation fee
+5,2200.00,Housing & Utilities,2024-01-20,Electricity and water bill
+6,600.00,Food & Dining,2024-01-22,Grocery shopping
+7,300.00,Entertainment,2024-01-25,Movie tickets
+8,750.00,Personal Care,2024-02-03,Haircut and grooming
+9,1800.00,Education,2024-02-10,Online course subscription
+10,5000.00,Travel,2024-02-14,Weekend trip to Hyderabad
+11,400.00,Food & Dining,2024-02-18,Restaurant dinner
+12,950.00,Transportation,2024-02-22,Cab rides for the month
+13,2800.00,Shopping,2024-03-02,Smartphone accessories
+14,1100.00,Health & Medical,2024-03-07,Pharmacy monthly medicines
+15,2500.00,Housing & Utilities,2024-03-15,Internet and streaming bills
+16,550.00,Food & Dining,2024-03-19,Weekly groceries
+17,700.00,Entertainment,2024-03-24,Gaming top-up and subscriptions
+18,3200.00,Savings & Investment,2024-03-28,SIP mutual fund deposit
+19,480.00,Food & Dining,2024-04-04,Breakfast and snacks
+20,1500.00,Transportation,2024-04-10,Bike service and fuel

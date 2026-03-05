@@ -1,0 +1,22 @@
+# Personal Finance Manager — Python Dependencies
+# ================================================
+# This project uses ONLY Python standard library modules.
+# No third-party packages are required.
+#
+# Standard library modules used:
+#   csv        - Data persistence (reading/writing CSV files)
+#   os         - File system operations
+#   sys        - System utilities and path management
+#   shutil     - File copy operations (backup/restore)
+#   datetime   - Date validation and formatting
+#   calendar   - Month name lookups
+#   collections- defaultdict for category aggregation
+#   time       - Brief pauses in the UI
+#   re         - (imported, available for extensions)
+#
+# Python version requirement:
+python_requires>=3.10
+#
+# To verify your Python version:
+#   python --version      (Windows)
+#   python3 --version     (Mac / Linux)
