@@ -1,0 +1,200 @@
+2026-04-03 03:40:50,401 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 03:40:50,426 | WARNING  | database | ALERT [CRITICAL] HIGH_TEMPERATURE: Test alert
+2026-04-03 03:40:50,455 | INFO     | validators | Batch validation — passed: 2, failed: 1
+2026-04-03 09:49:21,041 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:49:21,233 | WARNING  | database | ALERT [CRITICAL] HIGH_TEMPERATURE: Test alert
+2026-04-03 09:49:21,332 | INFO     | validators | Batch validation — passed: 2, failed: 1
+2026-04-03 09:51:29,984 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:51:30,067 | WARNING  | database | ALERT [CRITICAL] HIGH_TEMPERATURE: Test alert
+2026-04-03 09:51:30,116 | INFO     | validators | Batch validation — passed: 2, failed: 1
+2026-04-03 09:52:16,966 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:52:16,967 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:52:16,968 | INFO     | etl_pipeline |   PIPELINE RUN STARTED
+2026-04-03 09:52:16,968 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:52:16,968 | INFO     | etl_pipeline | [EXTRACT] Fetching 15 cities: ['Hyderabad', 'Bangalore', 'Vijayawada', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Surat', 'Bhopal', 'Patna', 'Kochi']
+2026-04-03 09:52:17,475 | INFO     | api_client |   Hyderabad: 28.23°C, 54% humidity, haze
+2026-04-03 09:52:18,380 | INFO     | api_client |   Bangalore: 26.95°C, 68% humidity, scattered clouds
+2026-04-03 09:52:19,244 | INFO     | api_client |   Vijayawada: 30.97°C, 62% humidity, scattered clouds
+2026-04-03 09:52:20,050 | INFO     | api_client |   Mumbai: 29.99°C, 48% humidity, smoke
+2026-04-03 09:52:20,815 | INFO     | api_client |   Delhi: 25.05°C, 61% humidity, dust
+2026-04-03 09:52:21,625 | INFO     | api_client |   Chennai: 30.41°C, 68% humidity, scattered clouds
+2026-04-03 09:52:22,441 | INFO     | api_client |   Kolkata: 31.97°C, 58% humidity, haze
+2026-04-03 09:52:23,243 | INFO     | api_client |   Pune: 27.86°C, 50% humidity, broken clouds
+2026-04-03 09:52:24,014 | INFO     | api_client |   Ahmedabad: 28.02°C, 44% humidity, smoke
+2026-04-03 09:52:24,798 | INFO     | api_client |   Jaipur: 25.62°C, 44% humidity, haze
+2026-04-03 09:52:25,619 | INFO     | api_client |   Lucknow: 29.99°C, 39% humidity, haze
+2026-04-03 09:52:26,416 | INFO     | api_client |   Surat: 28.99°C, 70% humidity, haze
+2026-04-03 09:52:27,213 | INFO     | api_client |   Bhopal: 26.13°C, 57% humidity, few clouds
+2026-04-03 09:52:28,007 | INFO     | api_client |   Patna: 33.96°C, 36% humidity, haze
+2026-04-03 09:52:28,820 | INFO     | api_client |   Kochi: 30.57°C, 77% humidity, overcast clouds
+2026-04-03 09:52:29,221 | INFO     | api_client | Fetched 15/15 cities successfully
+2026-04-03 09:52:29,221 | INFO     | etl_pipeline | [EXTRACT] Got 15 responses
+2026-04-03 09:52:29,221 | INFO     | etl_pipeline | [TRANSFORM] Validating 15 records...
+2026-04-03 09:52:29,221 | INFO     | validators | Batch validation — passed: 15, failed: 0
+2026-04-03 09:52:29,222 | INFO     | etl_pipeline | [TRANSFORM] 15 valid, 0 rejected
+2026-04-03 09:52:29,222 | INFO     | etl_pipeline | [LOAD] Writing 15 records...
+2026-04-03 09:52:29,634 | INFO     | etl_pipeline | [LOAD] Done — 15 records inserted, 0 alerts triggered
+2026-04-03 09:52:29,649 | INFO     | etl_pipeline |   Status    : SUCCESS ✅
+2026-04-03 09:52:29,650 | INFO     | etl_pipeline |   Extracted : 15
+2026-04-03 09:52:29,650 | INFO     | etl_pipeline |   Loaded    : 15
+2026-04-03 09:52:29,651 | INFO     | etl_pipeline |   Alerts    : 0
+2026-04-03 09:52:29,651 | INFO     | etl_pipeline |   Duration  : 12.67s
+2026-04-03 09:52:29,651 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:53:53,548 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:53:53,550 | INFO     | scheduler | Scheduler started — collecting every 60 minute(s)
+2026-04-03 09:53:53,552 | INFO     | scheduler | Running initial collection now...
+2026-04-03 09:53:53,552 | INFO     | scheduler | Scheduled collection triggered at 2026-04-03 09:53:53
+2026-04-03 09:53:53,553 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:53:53,555 | INFO     | etl_pipeline |   PIPELINE RUN STARTED
+2026-04-03 09:53:53,556 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:53:53,556 | INFO     | etl_pipeline | [EXTRACT] Fetching 15 cities: ['Hyderabad', 'Bangalore', 'Vijayawada', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Surat', 'Bhopal', 'Patna', 'Kochi']
+2026-04-03 09:53:54,035 | INFO     | api_client |   Hyderabad: 28.23°C, 54% humidity, haze
+2026-04-03 09:53:54,983 | INFO     | api_client |   Bangalore: 26.95°C, 68% humidity, scattered clouds
+2026-04-03 09:53:55,926 | INFO     | api_client |   Vijayawada: 30.97°C, 62% humidity, scattered clouds
+2026-04-03 09:53:56,867 | INFO     | api_client |   Mumbai: 29.99°C, 48% humidity, smoke
+2026-04-03 09:53:57,661 | INFO     | api_client |   Delhi: 25.05°C, 61% humidity, dust
+2026-04-03 09:53:58,546 | INFO     | api_client |   Chennai: 30.41°C, 68% humidity, scattered clouds
+2026-04-03 09:53:59,470 | INFO     | api_client |   Kolkata: 31.97°C, 58% humidity, haze
+2026-04-03 09:54:00,364 | INFO     | api_client |   Pune: 27.86°C, 50% humidity, broken clouds
+2026-04-03 09:54:01,177 | INFO     | api_client |   Ahmedabad: 28.02°C, 44% humidity, smoke
+2026-04-03 09:54:01,990 | INFO     | api_client |   Jaipur: 25.62°C, 44% humidity, haze
+2026-04-03 09:54:02,778 | INFO     | api_client |   Lucknow: 29.99°C, 39% humidity, haze
+2026-04-03 09:54:03,618 | INFO     | api_client |   Surat: 28.99°C, 70% humidity, haze
+2026-04-03 09:54:04,458 | INFO     | api_client |   Bhopal: 26.13°C, 57% humidity, few clouds
+2026-04-03 09:54:05,293 | INFO     | api_client |   Patna: 33.96°C, 36% humidity, haze
+2026-04-03 09:54:06,160 | INFO     | api_client |   Kochi: 30.57°C, 77% humidity, overcast clouds
+2026-04-03 09:54:06,560 | INFO     | api_client | Fetched 15/15 cities successfully
+2026-04-03 09:54:06,560 | INFO     | etl_pipeline | [EXTRACT] Got 15 responses
+2026-04-03 09:54:06,561 | INFO     | etl_pipeline | [TRANSFORM] Validating 15 records...
+2026-04-03 09:54:06,561 | INFO     | validators | Batch validation — passed: 15, failed: 0
+2026-04-03 09:54:06,562 | INFO     | etl_pipeline | [TRANSFORM] 15 valid, 0 rejected
+2026-04-03 09:54:06,562 | INFO     | etl_pipeline | [LOAD] Writing 15 records...
+2026-04-03 09:54:07,155 | INFO     | etl_pipeline | [LOAD] Done — 15 records inserted, 0 alerts triggered
+2026-04-03 09:54:07,180 | INFO     | etl_pipeline |   Status    : SUCCESS ✅
+2026-04-03 09:54:07,180 | INFO     | etl_pipeline |   Extracted : 15
+2026-04-03 09:54:07,181 | INFO     | etl_pipeline |   Loaded    : 15
+2026-04-03 09:54:07,181 | INFO     | etl_pipeline |   Alerts    : 0
+2026-04-03 09:54:07,181 | INFO     | etl_pipeline |   Duration  : 13.6s
+2026-04-03 09:54:07,181 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:54:07,182 | INFO     | scheduler | Scheduler running. Press Ctrl+C to stop.
+2026-04-03 09:54:26,253 | INFO     | scheduler | Stop signal received — shutting down scheduler
+2026-04-03 09:54:27,184 | INFO     | scheduler | Scheduler stopped.
+2026-04-03 09:55:01,845 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:55:01,993 | WARNING  | database | ALERT [CRITICAL] HIGH_TEMPERATURE: Test alert
+2026-04-03 09:55:02,048 | INFO     | validators | Batch validation — passed: 2, failed: 1
+2026-04-03 09:58:22,434 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 09:58:22,437 | INFO     | scheduler | Scheduler started — collecting every 60 minute(s)
+2026-04-03 09:58:22,439 | INFO     | scheduler | Running initial collection now...
+2026-04-03 09:58:22,439 | INFO     | scheduler | Scheduled collection triggered at 2026-04-03 09:58:22
+2026-04-03 09:58:22,439 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:58:22,440 | INFO     | etl_pipeline |   PIPELINE RUN STARTED
+2026-04-03 09:58:22,440 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:58:22,441 | INFO     | etl_pipeline | [EXTRACT] Fetching 15 cities: ['Hyderabad', 'Bangalore', 'Vijayawada', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Surat', 'Bhopal', 'Patna', 'Kochi']
+2026-04-03 09:58:22,879 | INFO     | api_client |   Hyderabad: 28.23°C, 54% humidity, haze
+2026-04-03 09:58:23,815 | INFO     | api_client |   Bangalore: 26.95°C, 68% humidity, scattered clouds
+2026-04-03 09:58:24,703 | INFO     | api_client |   Vijayawada: 30.97°C, 62% humidity, scattered clouds
+2026-04-03 09:58:25,482 | INFO     | api_client |   Mumbai: 29.99°C, 48% humidity, smoke
+2026-04-03 09:58:26,375 | INFO     | api_client |   Delhi: 25.05°C, 61% humidity, dust
+2026-04-03 09:58:27,440 | INFO     | api_client |   Chennai: 30.41°C, 68% humidity, scattered clouds
+2026-04-03 09:58:28,237 | INFO     | api_client |   Kolkata: 31.97°C, 58% humidity, haze
+2026-04-03 09:58:29,039 | INFO     | api_client |   Pune: 27.86°C, 50% humidity, broken clouds
+2026-04-03 09:58:29,836 | INFO     | api_client |   Ahmedabad: 28.02°C, 44% humidity, smoke
+2026-04-03 09:58:30,647 | INFO     | api_client |   Jaipur: 25.62°C, 44% humidity, haze
+2026-04-03 09:58:31,453 | INFO     | api_client |   Lucknow: 29.99°C, 39% humidity, haze
+2026-04-03 09:58:32,249 | INFO     | api_client |   Surat: 28.99°C, 70% humidity, haze
+2026-04-03 09:58:33,083 | INFO     | api_client |   Bhopal: 26.13°C, 57% humidity, few clouds
+2026-04-03 09:58:33,887 | INFO     | api_client |   Patna: 33.96°C, 36% humidity, haze
+2026-04-03 09:58:34,776 | INFO     | api_client |   Kochi: 30.57°C, 77% humidity, overcast clouds
+2026-04-03 09:58:35,177 | INFO     | api_client | Fetched 15/15 cities successfully
+2026-04-03 09:58:35,177 | INFO     | etl_pipeline | [EXTRACT] Got 15 responses
+2026-04-03 09:58:35,178 | INFO     | etl_pipeline | [TRANSFORM] Validating 15 records...
+2026-04-03 09:58:35,178 | INFO     | validators | Batch validation — passed: 15, failed: 0
+2026-04-03 09:58:35,179 | INFO     | etl_pipeline | [TRANSFORM] 15 valid, 0 rejected
+2026-04-03 09:58:35,179 | INFO     | etl_pipeline | [LOAD] Writing 15 records...
+2026-04-03 09:58:35,441 | INFO     | etl_pipeline | [LOAD] Done — 15 records inserted, 0 alerts triggered
+2026-04-03 09:58:35,449 | INFO     | etl_pipeline |   Status    : SUCCESS ✅
+2026-04-03 09:58:35,449 | INFO     | etl_pipeline |   Extracted : 15
+2026-04-03 09:58:35,449 | INFO     | etl_pipeline |   Loaded    : 15
+2026-04-03 09:58:35,450 | INFO     | etl_pipeline |   Alerts    : 0
+2026-04-03 09:58:35,450 | INFO     | etl_pipeline |   Duration  : 13.0s
+2026-04-03 09:58:35,450 | INFO     | etl_pipeline | =======================================================
+2026-04-03 09:58:35,451 | INFO     | scheduler | Scheduler running. Press Ctrl+C to stop.
+2026-04-03 09:58:45,221 | INFO     | scheduler | Stop signal received — shutting down scheduler
+2026-04-03 09:58:53,953 | INFO     | scheduler | Stop signal received — shutting down scheduler
+2026-04-03 09:58:55,453 | INFO     | scheduler | Scheduler stopped.
+2026-04-03 10:31:51,802 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 10:31:51,877 | WARNING  | database | ALERT [CRITICAL] HIGH_TEMPERATURE: Test alert
+2026-04-03 10:31:51,923 | INFO     | validators | Batch validation — passed: 2, failed: 1
+2026-04-03 10:32:24,006 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 10:32:24,007 | INFO     | scheduler | Scheduler started — collecting every 60 minute(s)
+2026-04-03 10:32:24,009 | INFO     | scheduler | Running initial collection now...
+2026-04-03 10:32:24,011 | INFO     | scheduler | Scheduled collection triggered at 2026-04-03 10:32:24
+2026-04-03 10:32:24,012 | INFO     | etl_pipeline | =======================================================
+2026-04-03 10:32:24,013 | INFO     | etl_pipeline |   PIPELINE RUN STARTED
+2026-04-03 10:32:24,013 | INFO     | etl_pipeline | =======================================================
+2026-04-03 10:32:24,014 | INFO     | etl_pipeline | [EXTRACT] Fetching 15 cities: ['Hyderabad', 'Bangalore', 'Vijayawada', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Surat', 'Bhopal', 'Patna', 'Kochi']
+2026-04-03 10:32:24,451 | INFO     | api_client |   Hyderabad: 30.23°C, 48% humidity, haze
+2026-04-03 10:32:25,340 | INFO     | api_client |   Bangalore: 28.83°C, 59% humidity, scattered clouds
+2026-04-03 10:32:26,169 | INFO     | api_client |   Vijayawada: 30.97°C, 62% humidity, scattered clouds
+2026-04-03 10:32:27,017 | INFO     | api_client |   Mumbai: 30.99°C, 37% humidity, smoke
+2026-04-03 10:32:27,898 | INFO     | api_client |   Delhi: 26.05°C, 57% humidity, dust
+2026-04-03 10:32:28,738 | INFO     | api_client |   Chennai: 31.53°C, 62% humidity, scattered clouds
+2026-04-03 10:32:29,649 | INFO     | api_client |   Kolkata: 32.97°C, 55% humidity, haze
+2026-04-03 10:32:30,598 | INFO     | api_client |   Pune: 28.97°C, 44% humidity, broken clouds
+2026-04-03 10:32:31,441 | INFO     | api_client |   Ahmedabad: 28.02°C, 44% humidity, smoke
+2026-04-03 10:32:32,266 | INFO     | api_client |   Jaipur: 25.62°C, 44% humidity, haze
+2026-04-03 10:32:34,405 | INFO     | api_client |   Lucknow: 29.99°C, 39% humidity, haze
+2026-04-03 10:32:35,212 | INFO     | api_client |   Surat: 29.99°C, 54% humidity, haze
+2026-04-03 10:32:37,045 | INFO     | api_client |   Bhopal: 27.13°C, 47% humidity, few clouds
+2026-04-03 10:32:37,839 | INFO     | api_client |   Patna: 34.96°C, 31% humidity, haze
+2026-04-03 10:32:38,648 | INFO     | api_client |   Kochi: 30.57°C, 77% humidity, overcast clouds
+2026-04-03 10:32:39,050 | INFO     | api_client | Fetched 15/15 cities successfully
+2026-04-03 10:32:39,051 | INFO     | etl_pipeline | [EXTRACT] Got 15 responses
+2026-04-03 10:32:39,051 | INFO     | etl_pipeline | [TRANSFORM] Validating 15 records...
+2026-04-03 10:32:39,053 | INFO     | validators | Batch validation — passed: 15, failed: 0
+2026-04-03 10:32:39,053 | INFO     | etl_pipeline | [TRANSFORM] 15 valid, 0 rejected
+2026-04-03 10:32:39,054 | INFO     | etl_pipeline | [LOAD] Writing 15 records...
+2026-04-03 10:32:39,480 | INFO     | etl_pipeline | [LOAD] Done — 15 records inserted, 0 alerts triggered
+2026-04-03 10:32:39,495 | INFO     | etl_pipeline |   Status    : SUCCESS ✅
+2026-04-03 10:32:39,495 | INFO     | etl_pipeline |   Extracted : 15
+2026-04-03 10:32:39,496 | INFO     | etl_pipeline |   Loaded    : 15
+2026-04-03 10:32:39,496 | INFO     | etl_pipeline |   Alerts    : 0
+2026-04-03 10:32:39,496 | INFO     | etl_pipeline |   Duration  : 15.47s
+2026-04-03 10:32:39,497 | INFO     | etl_pipeline | =======================================================
+2026-04-03 10:32:39,497 | INFO     | scheduler | Scheduler running. Press Ctrl+C to stop.
+2026-04-03 10:32:50,537 | INFO     | scheduler | Stop signal received — shutting down scheduler
+2026-04-03 10:32:55,211 | INFO     | scheduler | Stop signal received — shutting down scheduler
+2026-04-03 10:32:59,498 | INFO     | scheduler | Scheduler stopped.
+2026-04-03 10:34:13,724 | INFO     | database | Database setup complete — all tables and indexes ready
+2026-04-03 10:34:13,727 | INFO     | etl_pipeline | =======================================================
+2026-04-03 10:34:13,727 | INFO     | etl_pipeline |   PIPELINE RUN STARTED
+2026-04-03 10:34:13,728 | INFO     | etl_pipeline | =======================================================
+2026-04-03 10:34:13,728 | INFO     | etl_pipeline | [EXTRACT] Fetching 15 cities: ['Hyderabad', 'Bangalore', 'Vijayawada', 'Mumbai', 'Delhi', 'Chennai', 'Kolkata', 'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Surat', 'Bhopal', 'Patna', 'Kochi']
+2026-04-03 10:34:14,187 | INFO     | api_client |   Hyderabad: 30.23°C, 48% humidity, haze
+2026-04-03 10:34:15,060 | INFO     | api_client |   Bangalore: 28.83°C, 59% humidity, scattered clouds
+2026-04-03 10:34:15,884 | INFO     | api_client |   Vijayawada: 30.97°C, 62% humidity, scattered clouds
+2026-04-03 10:34:16,686 | INFO     | api_client |   Mumbai: 30.99°C, 37% humidity, smoke
+2026-04-03 10:34:17,691 | INFO     | api_client |   Delhi: 26.05°C, 57% humidity, dust
+2026-04-03 10:34:18,516 | INFO     | api_client |   Chennai: 31.53°C, 62% humidity, scattered clouds
+2026-04-03 10:34:19,351 | INFO     | api_client |   Kolkata: 32.97°C, 55% humidity, haze
+2026-04-03 10:34:20,147 | INFO     | api_client |   Pune: 28.97°C, 44% humidity, broken clouds
+2026-04-03 10:34:20,970 | INFO     | api_client |   Ahmedabad: 28.02°C, 44% humidity, smoke
+2026-04-03 10:34:21,784 | INFO     | api_client |   Jaipur: 25.62°C, 44% humidity, haze
+2026-04-03 10:34:22,626 | INFO     | api_client |   Lucknow: 29.99°C, 39% humidity, haze
+2026-04-03 10:34:23,509 | INFO     | api_client |   Surat: 29.99°C, 54% humidity, haze
+2026-04-03 10:34:24,320 | INFO     | api_client |   Bhopal: 27.13°C, 47% humidity, few clouds
+2026-04-03 10:34:25,131 | INFO     | api_client |   Patna: 34.96°C, 31% humidity, haze
+2026-04-03 10:34:26,010 | INFO     | api_client |   Kochi: 30.57°C, 77% humidity, overcast clouds
+2026-04-03 10:34:26,411 | INFO     | api_client | Fetched 15/15 cities successfully
+2026-04-03 10:34:26,411 | INFO     | etl_pipeline | [EXTRACT] Got 15 responses
+2026-04-03 10:34:26,412 | INFO     | etl_pipeline | [TRANSFORM] Validating 15 records...
+2026-04-03 10:34:26,414 | INFO     | validators | Batch validation — passed: 15, failed: 0
+2026-04-03 10:34:26,415 | INFO     | etl_pipeline | [TRANSFORM] 15 valid, 0 rejected
+2026-04-03 10:34:26,416 | INFO     | etl_pipeline | [LOAD] Writing 15 records...
+2026-04-03 10:34:26,821 | INFO     | etl_pipeline | [LOAD] Done — 15 records inserted, 0 alerts triggered
+2026-04-03 10:34:26,834 | INFO     | etl_pipeline |   Status    : SUCCESS ✅
+2026-04-03 10:34:26,834 | INFO     | etl_pipeline |   Extracted : 15
+2026-04-03 10:34:26,837 | INFO     | etl_pipeline |   Loaded    : 15
+2026-04-03 10:34:26,838 | INFO     | etl_pipeline |   Alerts    : 0
+2026-04-03 10:34:26,838 | INFO     | etl_pipeline |   Duration  : 13.09s
+2026-04-03 10:34:26,839 | INFO     | etl_pipeline | =======================================================
