@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-04-07T07:36:21.492665",
+  "baseline_n": 5000,
+  "current_n": 133,
+  "feature_drift": {
+    "area_sqft": {
+      "ks_statistic": 0.116,
+      "p_value": 0.0564,
+      "drifted": 0
+    },
+    "age_years": {
+      "ks_statistic": 0.0958,
+      "p_value": 0.1731,
+      "drifted": 0
+    },
+    "bedrooms": {
+      "ks_statistic": 0.0394,
+      "p_value": 0.9831,
+      "drifted": 0
+    },
+    "amenities_score": {
+      "ks_statistic": 0.0956,
+      "p_value": 0.175,
+      "drifted": 0
+    },
+    "floor": {
+      "ks_statistic": 0.0702,
+      "p_value": 0.5226,
+      "drifted": 0
+    }
+  },
+  "concept_drift": {
+    "mape": 0.0436,
+    "drifted": 0
+  },
+  "price_psi": {
+    "psi": 0.0703,
+    "significant": false
+  },
+  "action_required": false,
+  "recommendation": "\u2705 Model performance is stable"
+}

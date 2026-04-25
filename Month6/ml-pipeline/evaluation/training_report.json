@@ -1,0 +1,34 @@
+{
+  "training_date": "2026-04-09T11:24:37.618319",
+  "dataset_size": 5000,
+  "train_size": 3612,
+  "test_size": 750,
+  "model_results": {
+    "XGBoost": {
+      "MAE": 2340164.11,
+      "RMSE": 3886251.05,
+      "R2": 0.9648,
+      "MAPE": 10.92
+    },
+    "RandomForest": {
+      "MAE": 4579699.03,
+      "RMSE": 8062832.54,
+      "R2": 0.8483,
+      "MAPE": 19.67
+    },
+    "NeuralNetwork": {
+      "MAE": 9668113.62,
+      "RMSE": 17626187.04,
+      "R2": 0.275,
+      "MAPE": 43.11
+    },
+    "Ensemble": {
+      "MAE": 3695210.78,
+      "RMSE": 6353986.38,
+      "R2": 0.9058,
+      "MAPE": 16.78
+    }
+  },
+  "best_model": "XGBoost",
+  "feature_count": 27
+}

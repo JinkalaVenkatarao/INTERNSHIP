@@ -1,0 +1,43 @@
+groups:
+  - name: realestate_alerts
+    rules:
+
+      # High error rate
+      - alert: HighErrorRate
+        expr: rate(api_errors_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High API error rate detected"
+          description: "Error rate is {{ $value | humanizePercentage }} over last 5 minutes"
+
+      # High prediction latency
+      - alert: HighPredictionLatency
+        expr: histogram_quantile(0.95, rate(prediction_latency_seconds_bucket[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High prediction latency"
+          description: "P95 latency is {{ $value | humanizeDuration }}"
+
+      # API down
+      - alert: APIDown
+        expr: up{job="realestate_api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Real Estate API is DOWN"
+          description: "The prediction API has been unreachable for 1 minute"
+
+      # Model drift warning (MAPE spike)
+      - alert: ModelDriftWarning
+        expr: prediction_mape_gauge > 0.15
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Potential model drift detected"
+          description: "MAPE {{ $value | humanizePercentage }} exceeds 15% threshold"

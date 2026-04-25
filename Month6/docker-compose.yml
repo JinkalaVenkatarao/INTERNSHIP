@@ -1,0 +1,156 @@
+version: "3.9"
+
+# ─── Real Estate Price Prediction — Full Stack ────────────────────────────────
+# Usage: docker-compose up --build
+# API docs: http://localhost:8000/api/docs
+# Frontend: http://localhost:3000
+# Grafana:  http://localhost:3001  (admin/admin)
+# Prometheus: http://localhost:9090
+
+services:
+
+  # ── FastAPI Backend ──────────────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.api
+    container_name: realestate_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./ml-pipeline:/app/ml-pipeline
+      - model_volume:/app/backend/models
+    environment:
+      - ENV=production
+      - LOG_LEVEL=info
+      - WORKERS=4
+    depends_on:
+      - redis
+      - postgres
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app_net
+
+  # ── Training Job (runs once, then exits) ──────────────────────────────────────
+  trainer:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.trainer
+    container_name: realestate_trainer
+    volumes:
+      - ./ml-pipeline:/app/ml-pipeline
+      - model_volume:/app/backend/models
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - app_net
+    profiles:
+      - training
+
+  # ── PostgreSQL Database ───────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: realestate_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB:       realestate
+      POSTGRES_USER:     admin
+      POSTGRES_PASSWORD: secret123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d realestate"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_net
+
+  # ── Redis Cache ───────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: realestate_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_net
+
+  # ── Frontend (Nginx) ──────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Dockerfile.frontend
+    container_name: realestate_frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - app_net
+
+  # ── Prometheus Metrics ────────────────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: realestate_prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=30d"
+    networks:
+      - app_net
+
+  # ── Grafana Dashboard ────────────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: realestate_grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER:     admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP:     "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    depends_on:
+      - prometheus
+    networks:
+      - app_net
+
+# ── Volumes & Networks ──────────────────────────────────────────────────────────
+volumes:
+  postgres_data:
+  redis_data:
+  prometheus_data:
+  grafana_data:
+  model_volume:
+
+networks:
+  app_net:
+    driver: bridge

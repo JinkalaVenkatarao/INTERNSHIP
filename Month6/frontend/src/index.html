@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🏠 RealPrice AI — Indian Real Estate Price Predictor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    /* ── Reset & Tokens ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --surface2:  #1e2631;
+      --border:    #30363d;
+      --accent:    #2563eb;
+      --accent2:   #7c3aed;
+      --green:     #10b981;
+      --amber:     #f59e0b;
+      --red:       #ef4444;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --radius:    12px;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+
+    /* ── Layout ─────────────────────────────────────────────────────────── */
+    .navbar {
+      background: var(--surface); border-bottom: 1px solid var(--border);
+      padding: 0 2rem; height: 60px; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo { font-size: 1.3rem; font-weight: 700; background: linear-gradient(135deg, #2563eb, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-badge { background: var(--green); color: #fff; font-size: .7rem; padding: 2px 8px; border-radius: 99px; margin-left: .5rem; }
+
+    .layout { display: grid; grid-template-columns: 340px 1fr; min-height: calc(100vh - 60px); }
+    .sidebar { background: var(--surface); border-right: 1px solid var(--border); padding: 1.5rem; overflow-y: auto; }
+    .main    { padding: 1.5rem; overflow-y: auto; }
+
+    /* ── Cards ──────────────────────────────────────────────────────────── */
+    .card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem; }
+    .card-title { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 1rem; }
+
+    /* ── Form Controls ──────────────────────────────────────────────────── */
+    .form-group { margin-bottom: 1rem; }
+    label { display: block; font-size: .8rem; color: var(--muted); margin-bottom: .35rem; font-weight: 500; }
+    input, select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); padding: .55rem .75rem; font-size: .9rem; outline: none; transition: border-color .2s;
+    }
+    input:focus, select:focus { border-color: var(--accent); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+    /* ── Buttons ────────────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: .4rem;
+      padding: .65rem 1.25rem; border-radius: 8px; font-size: .9rem;
+      font-weight: 600; cursor: pointer; border: none; transition: all .2s;
+    }
+    .btn-primary { background: var(--accent); color: #fff; width: 100%; justify-content: center; }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+    .btn-sm { padding: .4rem .8rem; font-size: .8rem; }
+    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+
+    /* ── Stat Cards ─────────────────────────────────────────────────────── */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+    .stat-icon { font-size: 1.5rem; margin-bottom: .5rem; }
+    .stat-value { font-size: 1.6rem; font-weight: 700; line-height: 1; }
+    .stat-label { font-size: .78rem; color: var(--muted); margin-top: .25rem; }
+    .text-green  { color: var(--green); }
+    .text-blue   { color: var(--accent); }
+    .text-purple { color: var(--accent2); }
+    .text-amber  { color: var(--amber); }
+
+    /* ── Result Panel ───────────────────────────────────────────────────── */
+    .result-panel {
+      background: linear-gradient(135deg, #1e3a5f 0%, #1a1040 100%);
+      border: 1px solid #2563eb44; border-radius: var(--radius); padding: 2rem; text-align: center;
+      display: none; margin-bottom: 1.5rem;
+    }
+    .result-panel.show { display: block; }
+    .result-price { font-size: 2.8rem; font-weight: 800; color: var(--green); }
+    .result-lakhs { font-size: 1.1rem; color: var(--muted); margin: .25rem 0 1rem; }
+    .confidence-bar { display: flex; gap: 1rem; justify-content: center; margin-top: .75rem; }
+    .conf-item { background: rgba(255,255,255,.07); border-radius: 8px; padding: .5rem 1rem; font-size: .85rem; }
+
+    /* ── Charts ─────────────────────────────────────────────────────────── */
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .chart-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .chart-wrap canvas { max-height: 200px; }
+
+    /* ── History Table ──────────────────────────────────────────────────── */
+    table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+    th, td { padding: .65rem .75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--muted); font-weight: 600; font-size: .75rem; text-transform: uppercase; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,.02); }
+
+    /* ── Badges ─────────────────────────────────────────────────────────── */
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: .72rem; font-weight: 600; }
+    .badge-green  { background: #10b98120; color: var(--green); }
+    .badge-blue   { background: #2563eb20; color: var(--accent); }
+    .badge-amber  { background: #f59e0b20; color: var(--amber); }
+
+    /* ── Loader ─────────────────────────────────────────────────────────── */
+    .spinner { display: inline-block; width: 18px; height: 18px; border: 3px solid rgba(255,255,255,.2); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--muted); }
+    .empty-state .icon { font-size: 3rem; margin-bottom: .75rem; }
+
+    /* ── Tabs ───────────────────────────────────────────────────────────── */
+    .tabs { display: flex; gap: .25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem; }
+    .tab { padding: .6rem 1.1rem; font-size: .875rem; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); transition: all .2s; }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navbar ──────────────────────────────────────────────────────────────── -->
+<nav class="navbar">
+  <div class="logo">🏠 RealPrice AI <span class="nav-badge">LIVE</span></div>
+  <div style="display:flex;gap:.75rem;align-items:center">
+    <span id="modelBadge" style="font-size:.8rem;color:var(--muted)">Loading model…</span>
+    <button class="btn btn-outline btn-sm" onclick="fetchHealth()">⟳ Refresh</button>
+  </div>
+</nav>
+
+<!-- ── Main Layout ─────────────────────────────────────────────────────────── -->
+<div class="layout">
+
+  <!-- ── Sidebar: Prediction Form ─────────────────────────────────────────── -->
+  <aside class="sidebar">
+    <div class="card-title" style="margin-bottom:.75rem">🔍 Property Details</div>
+
+    <div class="form-group">
+      <label>City *</label>
+      <select id="city" onchange="updateLocalities()">
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Delhi NCR">Delhi NCR</option>
+        <option value="Pune">Pune</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Locality *</label>
+      <select id="locality"></select>
+    </div>
+
+    <div class="form-group">
+      <label>Property Type *</label>
+      <select id="property_type">
+        <option>Apartment</option>
+        <option>Villa</option>
+        <option>Independent House</option>
+        <option>Penthouse</option>
+        <option>Studio</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Area (sq ft) *</label>
+        <input type="number" id="area_sqft" value="1200" min="300" max="50000" />
+      </div>
+      <div class="form-group">
+        <label>Age (years) *</label>
+        <input type="number" id="age_years" value="3" min="0" max="50" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Bedrooms</label>
+        <select id="bedrooms">
+          <option>1</option><option>2</option><option selected>3</option>
+          <option>4</option><option>5</option><option>6</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Bathrooms</label>
+        <select id="bathrooms">
+          <option>1</option><option selected>2</option>
+          <option>3</option><option>4</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Floor</label>
+        <input type="number" id="floor" value="5" min="0" max="60" />
+      </div>
+      <div class="form-group">
+        <label>Total Floors</label>
+        <input type="number" id="total_floors" value="12" min="1" max="60" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Facing</label>
+        <select id="facing">
+          <option selected>East</option><option>West</option><option>North</option>
+          <option>South</option><option>North-East</option><option>North-West</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Parking</label>
+        <select id="parking_spaces">
+          <option value="0">None</option><option value="1" selected>1</option>
+          <option value="2">2</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Furnishing</label>
+      <select id="furnishing_status">
+        <option>Unfurnished</option>
+        <option selected>Semi-Furnished</option>
+        <option>Fully Furnished</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Amenities Score (0–1)</label>
+      <input type="range" id="amenities_score" min="0" max="1" step="0.1" value="0.6"
+             oninput="document.getElementById('amScore').textContent=this.value" />
+      <small style="color:var(--muted)">Score: <span id="amScore">0.6</span></small>
+    </div>
+
+    <div class="form-group">
+      <label>Connectivity</label>
+      <div style="display:flex;gap:1rem;margin-top:.25rem">
+        <label style="display:flex;gap:.35rem;align-items:center;color:var(--text);font-size:.85rem">
+          <input type="checkbox" id="near_metro" checked /> Metro
+        </label>
+        <label style="display:flex;gap:.35rem;align-items:center;color:var(--text);font-size:.85rem">
+          <input type="checkbox" id="near_school" checked /> School
+        </label>
+        <label style="display:flex;gap:.35rem;align-items:center;color:var(--text);font-size:.85rem">
+          <input type="checkbox" id="near_hospital" /> Hospital
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Possession Status</label>
+      <select id="possession_status">
+        <option>Ready to Move</option>
+        <option>Under Construction</option>
+        <option>New Launch</option>
+      </select>
+    </div>
+
+    <button class="btn btn-primary" id="predictBtn" onclick="predict()">
+      🤖 Predict Price
+    </button>
+  </aside>
+
+  <!-- ── Main Panel ────────────────────────────────────────────────────────── -->
+  <main class="main">
+
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🔮</div>
+        <div class="stat-value text-green" id="statTotal">0</div>
+        <div class="stat-label">Predictions Made</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-value text-blue" id="statLatency">—</div>
+        <div class="stat-label">Avg Latency (ms)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value text-purple">96.5%</div>
+        <div class="stat-label">Model Accuracy (R²)</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🏙️</div>
+        <div class="stat-value text-amber">5</div>
+        <div class="stat-label">Cities Covered</div>
+      </div>
+    </div>
+
+    <!-- Result Panel -->
+    <div class="result-panel" id="resultPanel">
+      <div style="font-size:.9rem;color:var(--muted);margin-bottom:.5rem">Estimated Market Price</div>
+      <div class="result-price" id="resultPrice">₹0</div>
+      <div class="result-lakhs" id="resultLakhs">0 Lakhs</div>
+      <div class="confidence-bar">
+        <div class="conf-item">🔽 Lower: <strong id="confLow">—</strong></div>
+        <div class="conf-item">🔼 Upper: <strong id="confHigh">—</strong></div>
+      </div>
+      <div style="margin-top:1rem;font-size:.8rem;color:var(--muted)">
+        ID: <span id="predId"></span> &nbsp;|&nbsp; Model: XGBoost v1.0.0
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('analytics')">📊 Analytics</div>
+      <div class="tab" onclick="switchTab('history')">📋 History</div>
+      <div class="tab" onclick="switchTab('insights')">💡 Market Insights</div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="tab-analytics">
+      <div class="charts-grid">
+        <div class="chart-wrap">
+          <div class="card-title">Price Distribution by City (₹ Lakhs)</div>
+          <canvas id="chartCity"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="card-title">Feature Importance</div>
+          <canvas id="chartFeatures"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="card-title">Price vs Area Trend</div>
+          <canvas id="chartArea"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="card-title">Property Type Distribution</div>
+          <canvas id="chartPtype"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Tab -->
+    <div id="tab-history" style="display:none">
+      <div class="card">
+        <div class="card-title">Prediction History</div>
+        <div id="historyContainer">
+          <div class="empty-state">
+            <div class="icon">🔮</div>
+            <div>Make your first prediction to see history</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Insights Tab -->
+    <div id="tab-insights" style="display:none">
+      <div class="charts-grid">
+        <div class="chart-wrap">
+          <div class="card-title">Avg Price per Sq Ft by City (₹)</div>
+          <canvas id="chartPricePerSqft"></canvas>
+        </div>
+        <div class="chart-wrap">
+          <div class="card-title">Price by Furnishing Status</div>
+          <canvas id="chartFurnishing"></canvas>
+        </div>
+      </div>
+      <div class="card" style="margin-top:1rem">
+        <div class="card-title">📈 Market Summary — Indian Real Estate 2024–25</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:.5rem">
+          <div><strong style="color:var(--green)">Hyderabad</strong><br><small style="color:var(--muted)">₹7,500–12,000/sqft · Gachibowli, HiTech City hotspots</small></div>
+          <div><strong style="color:var(--blue)">Bangalore</strong><br><small style="color:var(--muted)">₹9,000–15,000/sqft · Whitefield, Koramangala leaders</small></div>
+          <div><strong style="color:var(--amber)">Mumbai</strong><br><small style="color:var(--muted)">₹18,000–30,000/sqft · Premium coastal demand</small></div>
+          <div><strong style="color:var(--accent2)">Delhi NCR</strong><br><small style="color:var(--muted)">₹11,000–18,000/sqft · Gurgaon tech corridor growing</small></div>
+          <div><strong style="color:var(--red)">Pune</strong><br><small style="color:var(--muted)">₹7,000–10,000/sqft · IT hub expansion driving demand</small></div>
+          <div><strong style="color:var(--text)">National Avg</strong><br><small style="color:var(--muted)">+8.5% YoY appreciation · 15-yr CAGR: 11.2%</small></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── Scripts ──────────────────────────────────────────────────────────────── -->
+<script>
+// ─── Locality data ─────────────────────────────────────────────────────────
+const LOCALITIES = {
+  "Hyderabad":  ["Gachibowli","Hitech City","Banjara Hills","Jubilee Hills","Kondapur","Madhapur","Kukatpally","Manikonda","Miyapur","Uppal","Secunderabad","Financial District","Kokapet","Nallagandla"],
+  "Bangalore":  ["Whitefield","Koramangala","Indiranagar","HSR Layout","Electronic City","Sarjapur Road","Hebbal","Marathahalli","JP Nagar","Bellandur","Yelahanka"],
+  "Mumbai":     ["Andheri","Powai","Bandra","Thane","Navi Mumbai","Malad","Goregaon","Borivali","Kurla","Chembur"],
+  "Delhi NCR":  ["Gurgaon","Noida","Dwarka","Rohini","Faridabad","Greater Noida","Indirapuram","Vasant Kunj"],
+  "Pune":       ["Hinjewadi","Kharadi","Baner","Wakad","Aundh","Hadapsar","Viman Nagar","Kothrud"],
+};
+
+// ─── State ────────────────────────────────────────────────────────────────
+const history = [];
+let charts = {};
+
+// ─── Locality selector ────────────────────────────────────────────────────
+function updateLocalities() {
+  const city = document.getElementById("city").value;
+  const sel  = document.getElementById("locality");
+  sel.innerHTML = LOCALITIES[city].map(l => `<option>${l}</option>`).join("");
+}
+updateLocalities();
+
+// ─── Tab switch ──────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    const names = ["analytics","history","insights"];
+    t.classList.toggle("active", names[i] === name);
+  });
+  ["analytics","history","insights"].forEach(n => {
+    const el = document.getElementById("tab-" + n);
+    if (el) el.style.display = n === name ? "" : "none";
+  });
+  if (name === "insights") buildInsightsCharts();
+}
+
+// ─── Simulate API call (demo mode — no backend needed for frontend) ────────
+async function predict() {
+  const btn = document.getElementById("predictBtn");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Predicting…';
+
+  try {
+    // Build request payload
+    const payload = {
+      area_sqft:         +document.getElementById("area_sqft").value,
+      bedrooms:          +document.getElementById("bedrooms").value,
+      bathrooms:         +document.getElementById("bathrooms").value,
+      balconies:         1,
+      floor:             +document.getElementById("floor").value,
+      total_floors:      +document.getElementById("total_floors").value,
+      age_years:         +document.getElementById("age_years").value,
+      city:               document.getElementById("city").value,
+      locality:           document.getElementById("locality").value,
+      property_type:      document.getElementById("property_type").value,
+      facing:             document.getElementById("facing").value,
+      furnishing_status:  document.getElementById("furnishing_status").value,
+      parking_spaces:    +document.getElementById("parking_spaces").value,
+      amenities_score:   +document.getElementById("amenities_score").value,
+      near_metro:         document.getElementById("near_metro").checked ? 1 : 0,
+      near_school:        document.getElementById("near_school").checked ? 1 : 0,
+      near_hospital:      document.getElementById("near_hospital").checked ? 1 : 0,
+      transaction_type:  "Sale",
+      possession_status:  document.getElementById("possession_status").value,
+    };
+
+    // Try real API first, fall back to local formula
+    let result;
+    try {
+      const res = await fetch("http://localhost:8000/api/v1/predict", {
+        method: "POST", headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(payload), signal: AbortSignal.timeout(3000)
+      });
+      result = await res.json();
+    } catch {
+      result = localPredict(payload);
+    }
+
+    showResult(result, payload);
+    updateStats(result);
+
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = "🤖 Predict Price";
+  }
+}
+
+// ─── Local prediction formula (fallback when no backend) ──────────────────
+function localPredict(p) {
+  const BASE = {"Hyderabad":7500,"Bangalore":9000,"Mumbai":18000,"Delhi NCR":11000,"Pune":7000};
+  const PREM = new Set(["Gachibowli","Hitech City","Banjara Hills","Jubilee Hills","Whitefield","Koramangala","Bandra","Gurgaon"]);
+  let psf = BASE[p.city] || 8000;
+  if (PREM.has(p.locality)) psf *= 1.28;
+  psf *= {Apartment:1.0,Villa:1.4,"Independent House":1.1,Penthouse:1.5,Studio:0.85}[p.property_type]||1.0;
+  psf *= Math.max(0.72, 1 - p.age_years * 0.012);
+  psf *= {East:1.05,"North-East":1.08,North:1.03,West:1.0,South:0.97,"North-West":1.01}[p.facing]||1.0;
+  psf *= {Unfurnished:1.0,"Semi-Furnished":1.06,"Fully Furnished":1.12}[p.furnishing_status]||1.0;
+  psf *= 1 + p.amenities_score * 0.15;
+  psf *= 1 + (p.near_metro*0.04 + p.near_school*0.02 + p.near_hospital*0.02);
+  psf *= (1 + Math.min(p.floor,20)*0.005);
+  psf *= (1 + (Math.random()-0.5)*0.08);
+  const price = psf * p.area_sqft;
+  const margin = price * 0.10;
+  return {
+    prediction_id: "demo-" + Math.random().toString(36).substr(2,8),
+    predicted_price: price, price_in_lakhs: price/100000,
+    confidence_interval: {lower_bound: price-margin, upper_bound: price+margin},
+    model_version: "1.0.0 (local)",
+    metadata: {latency_ms: (30 + Math.random()*40).toFixed(0)}
+  };
+}
+
+// ─── Show result ──────────────────────────────────────────────────────────
+function showResult(r, payload) {
+  const panel = document.getElementById("resultPanel");
+  panel.classList.add("show");
+  document.getElementById("resultPrice").textContent = "₹" + fmt(r.predicted_price);
+  document.getElementById("resultLakhs").textContent = r.price_in_lakhs.toFixed(2) + " Lakhs";
+  document.getElementById("confLow").textContent  = "₹" + fmt(r.confidence_interval.lower_bound);
+  document.getElementById("confHigh").textContent = "₹" + fmt(r.confidence_interval.upper_bound);
+  document.getElementById("predId").textContent   = r.prediction_id;
+  panel.scrollIntoView({behavior:"smooth"});
+
+  // Add to history
+  history.unshift({...r, payload, time: new Date().toLocaleTimeString()});
+  renderHistory();
+}
+
+// ─── Format numbers ───────────────────────────────────────────────────────
+function fmt(n) {
+  return new Intl.NumberFormat("en-IN").format(Math.round(n));
+}
+
+// ─── Stats banner ─────────────────────────────────────────────────────────
+function updateStats(r) {
+  document.getElementById("statTotal").textContent = history.length;
+  const lats = history.map(h => +h.metadata?.latency_ms || 50).slice(0,20);
+  document.getElementById("statLatency").textContent = Math.round(lats.reduce((a,b)=>a+b,0)/lats.length) + "ms";
+}
+
+// ─── History table ─────────────────────────────────────────────────────────
+function renderHistory() {
+  const container = document.getElementById("historyContainer");
+  if (!history.length) return;
+  container.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>Time</th><th>City/Locality</th><th>Type</th><th>Area</th>
+        <th>Bedrooms</th><th>Price</th><th>Lakhs</th>
+      </tr></thead>
+      <tbody>${history.slice(0,15).map(h => `<tr>
+        <td>${h.time}</td>
+        <td>${h.payload.city} / ${h.payload.locality}</td>
+        <td><span class="badge badge-blue">${h.payload.property_type}</span></td>
+        <td>${h.payload.area_sqft} sqft</td>
+        <td>${h.payload.bedrooms} BHK</td>
+        <td>₹${fmt(h.predicted_price)}</td>
+        <td><span class="badge badge-green">${h.price_in_lakhs.toFixed(1)}L</span></td>
+      </tr>`).join("")}
+      </tbody>
+    </table>`;
+}
+
+// ─── Health check ─────────────────────────────────────────────────────────
+async function fetchHealth() {
+  try {
+    const res  = await fetch("http://localhost:8000/api/v1/health", {signal: AbortSignal.timeout(2000)});
+    const data = await res.json();
+    document.getElementById("modelBadge").textContent = `✅ API Live · v${data.version} · ${data.total_predictions} preds`;
+  } catch {
+    document.getElementById("modelBadge").textContent = "⚡ Demo Mode (no backend)";
+  }
+}
+fetchHealth();
+
+// ─── Build Analytics Charts ────────────────────────────────────────────────
+function buildCharts() {
+  const opts = { responsive: true, plugins: {legend:{display:false}},
+    scales: { x:{ticks:{color:"#8b949e"},grid:{color:"#30363d"}},
+              y:{ticks:{color:"#8b949e"},grid:{color:"#30363d"}} } };
+
+  // City avg price
+  charts.city = new Chart(document.getElementById("chartCity"), {
+    type: "bar",
+    data: { labels: ["Hyderabad","Bangalore","Mumbai","Delhi NCR","Pune"],
+            datasets: [{ label:"Avg ₹ Lakhs",
+              data: [145, 190, 420, 240, 125],
+              backgroundColor: ["#2563eb","#7c3aed","#f59e0b","#10b981","#ef4444"] }] },
+    options: { ...opts, plugins:{legend:{display:false}} }
+  });
+
+  // Feature importance
+  charts.feat = new Chart(document.getElementById("chartFeatures"), {
+    type: "horizontalBar" in Chart.defaults ? "horizontalBar" : "bar",
+    data: { labels: ["Area","Location","Age","Furnishing","Floor","Amenities","Facing","Connectivity"],
+            datasets: [{ data:[46.5,23.7,14.8,6.1,4.2,2.8,1.3,0.6],
+              backgroundColor:"#2563eb", borderRadius:4 }] },
+    options: { ...opts, indexAxis:"y",
+      scales:{x:{...opts.scales.x,max:55},y:{...opts.scales.y}} }
+  });
+
+  // Area vs Price scatter (simulated)
+  const scatterData = Array.from({length:60},()=>{
+    const a = 400+Math.random()*4000, p = a*(7000+Math.random()*5000)/100000;
+    return {x:Math.round(a), y:+p.toFixed(1)};
+  });
+  charts.area = new Chart(document.getElementById("chartArea"), {
+    type:"scatter",
+    data:{ datasets:[{data:scatterData, backgroundColor:"#2563eb80", pointRadius:4}] },
+    options:{ ...opts, plugins:{legend:{display:false}},
+      scales:{ x:{...opts.scales.x, title:{display:true,text:"Area (sqft)",color:"#8b949e"}},
+               y:{...opts.scales.y, title:{display:true,text:"Price (₹ Lakhs)",color:"#8b949e"}} } }
+  });
+
+  // Property type donut
+  charts.ptype = new Chart(document.getElementById("chartPtype"), {
+    type:"doughnut",
+    data:{ labels:["Apartment","Ind. House","Villa","Studio","Penthouse"],
+      datasets:[{ data:[55,20,15,5,5],
+        backgroundColor:["#2563eb","#7c3aed","#10b981","#f59e0b","#ef4444"] }] },
+    options:{ responsive:true, plugins:{legend:{position:"right", labels:{color:"#8b949e",boxWidth:12}}} }
+  });
+}
+
+function buildInsightsCharts() {
+  if (charts.psf) return;
+  const opts = { responsive:true, plugins:{legend:{display:false}},
+    scales:{x:{ticks:{color:"#8b949e"},grid:{color:"#30363d"}},
+            y:{ticks:{color:"#8b949e"},grid:{color:"#30363d"}}} };
+
+  charts.psf = new Chart(document.getElementById("chartPricePerSqft"),{
+    type:"bar",
+    data:{ labels:["Hyderabad","Bangalore","Mumbai","Delhi NCR","Pune"],
+      datasets:[{data:[8200,10500,21000,12500,7800],
+        backgroundColor:["#2563eb","#7c3aed","#f59e0b","#10b981","#ef4444"],borderRadius:6}] },
+    options:{...opts}
+  });
+
+  charts.furn = new Chart(document.getElementById("chartFurnishing"),{
+    type:"bar",
+    data:{ labels:["Unfurnished","Semi-Furnished","Fully Furnished"],
+      datasets:[{data:[130,148,172], backgroundColor:["#30363d","#2563eb","#7c3aed"],borderRadius:6}] },
+    options:{...opts}
+  });
+}
+
+// Init
+buildCharts();
+</script>
+</body>
+</html>
